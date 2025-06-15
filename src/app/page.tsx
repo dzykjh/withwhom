@@ -1,95 +1,80 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+import React, { useState } from 'react';
+import { Box, Button, Typography, TextField, ToggleButton, ToggleButtonGroup, Paper, Stack } from '@mui/material';
+import { useRouter } from 'next/navigation';
+
+const categories = ['핫플레이스', '팝업스토어', '식당'];
+const companions = [
+  { label: '혼자', value: '혼자', size: 1 },
+  { label: '연인', value: '연인', size: 2 },
+  { label: '친구', value: '친구' },
+  { label: '가족', value: '가족' },
+  { label: '동료', value: '동료' },
+];
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const router = useRouter();
+  const [category, setCategory] = useState('핫플레이스');
+  const [companion, setCompanion] = useState('혼자');
+  const [groupSize, setGroupSize] = useState(1);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  const handleCategory = (_: any, newValue: string) => {
+    if (newValue) setCategory(newValue);
+  };
+  const handleCompanion = (_: any, newValue: string) => {
+    if (newValue) {
+      setCompanion(newValue);
+      const found = companions.find(c => c.value === newValue);
+      if (found && found.size) setGroupSize(found.size);
+      else setGroupSize(3);
+    }
+  };
+  const handleGroupSize = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setGroupSize(Number(e.target.value));
+  };
+  const isDisabled = companion === '혼자' || companion === '연인';
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push(`/map?category=${category}&companion_type=${companion}&group_size=${groupSize}`);
+  };
+
+  return (
+    <Box minHeight="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bgcolor="#f7f8fa">
+      <Typography variant="h3" fontWeight={700} color="#3b5bfd" mb={6}>
+        Withwhom?
+      </Typography>
+      <Paper elevation={3} sx={{ p: 4, mb: 3, minWidth: 350 }}>
+        <Typography variant="h6" mb={2}>어디로 가시나요?</Typography>
+        <ToggleButtonGroup value={category} exclusive onChange={handleCategory} fullWidth>
+          {categories.map(c => (
+            <ToggleButton key={c} value={c}>{c}</ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      </Paper>
+      <Paper elevation={3} sx={{ p: 4, mb: 3, minWidth: 350 }}>
+        <Typography variant="h6" mb={2}>누구와 함께하시나요?</Typography>
+        <ToggleButtonGroup value={companion} exclusive onChange={handleCompanion} fullWidth>
+          {companions.map(c => (
+            <ToggleButton key={c.value} value={c.value}>{c.label}</ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      </Paper>
+      <Paper elevation={3} sx={{ p: 4, mb: 3, minWidth: 350 }}>
+        <Typography variant="h6" mb={2}>몇 명이서 가시나요?</Typography>
+        <TextField
+          type="number"
+          value={groupSize}
+          onChange={handleGroupSize}
+          disabled={isDisabled}
+          inputProps={{ min: 1, max: 20 }}
+          fullWidth
+          placeholder="인원수 입력"
+        />
+      </Paper>
+      <Button variant="contained" size="large" onClick={handleSubmit} sx={{ mt: 2, minWidth: 200 }}>
+        추천 장소 보기
+      </Button>
+    </Box>
   );
 }

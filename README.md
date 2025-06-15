@@ -1,3 +1,28 @@
+# Withwhom?
+
+## 프로젝트 소개
+- 누구와, 몇 명이서, 어떤 종류의 플레이스를 방문할지에 따라 핫플레이스, 팝업스토어, 식당을 추천해주는 서비스입니다.
+- 사용자는 조건(카테고리, 동행자, 인원수)을 입력하면 지도와 리스트로 추천 장소를 확인할 수 있습니다.
+- 운영자는 관리자 페이지에서 장소를 직접 추가/수정/삭제할 수 있습니다.
+
+## 주요 기능
+- 장소 카테고리(핫플레이스/팝업스토어/식당) 선택
+- 동행자(혼자/연인/친구/가족/동료) 및 인원수 입력
+- 조건에 맞는 장소 추천(지도+리스트)
+- 관리자 페이지에서 장소 CRUD 및 로그인
+
+## 사용 기술
+- Next.js (React 기반, TypeScript)
+- MUI (Material UI)
+- Leaflet.js (지도)
+- MongoDB Atlas (DB)
+- Express (API)
+- next-auth (인증)
+
+## 개발 및 배포
+- 프론트/백엔드: Vercel 배포 추천
+- DB: MongoDB Atlas 무료 플랜 사용
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
